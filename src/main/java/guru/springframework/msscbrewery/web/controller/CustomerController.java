@@ -4,10 +4,10 @@ import guru.springframework.msscbrewery.service.CustomerService;
 import guru.springframework.msscbrewery.web.model.CustomerDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @RestController
@@ -26,10 +26,10 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDto> createCustomer(RequestEntity request, @RequestBody CustomerDto customerDto) {
+    public ResponseEntity<CustomerDto> createCustomer(HttpServletRequest request, @RequestBody CustomerDto customerDto) {
         CustomerDto createdCustomer = customerService.createCustomer(customerDto);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", request.getUrl() + "/" + createdCustomer.getId().toString());
+        headers.add("Location", request.getRequestURI() + "/" + createdCustomer.getId().toString());
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
